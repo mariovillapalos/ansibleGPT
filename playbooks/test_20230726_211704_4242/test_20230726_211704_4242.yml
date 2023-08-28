@@ -1,0 +1,35 @@
+---
+- name: Ensure filesystem integrity using AIDE
+  hosts: rhel8
+  become: true
+  tasks:
+    - name: Verify AIDE is not installed
+      command: rpm -q aide
+      register: aide_installed
+      changed_when: false
+      failed_when: false
+
+    - name: Install AIDE if not installed
+      package:
+        name: aide
+        state: present
+      when: aide_installed.rc != 0
+
+    - name: Initialize AIDE database
+      command: aide --init
+      changed_when: false
+      register: aide_init
+
+    - name: Rename AIDE database
+      command: mv /var/lib/aide/aide.db.new.gz /var/lib/aide/aide.db.gz
+      changed_when: false
+      when: aide_init.rc == 0
+
+    - name: Schedule AIDE check using cron
+      cron:
+        name: "Run AIDE check daily at 5am"
+        minute: 0
+        hour: 5
+        job: "/usr/bin/aide --check"
+      changed_when: false
+...

@@ -1,0 +1,12 @@
+{
+    "prompt": null,
+    "content": "",
+    "filename": "test_20230723_204932_6340.yml",
+    "foldername": "test_20230723_204932_6340",
+    "filepath": "./playbooks/test_20230723_204932_6340/test_20230723_204932_6340.yml",
+    "edited": false,
+    "errors": null,
+    "hostname": "rhel8",
+    "host": "RHEL 8",
+    "api": false
+}

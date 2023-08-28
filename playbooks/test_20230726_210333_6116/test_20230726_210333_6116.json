@@ -1,0 +1,12 @@
+{
+    "prompt": null,
+    "content": "hola mi vida\n",
+    "filename": "test_20230726_210333_6116.yml",
+    "foldername": "test_20230726_210333_6116",
+    "filepath": "./playbooks/test_20230726_210333_6116/test_20230726_210333_6116.yml",
+    "edited": false,
+    "errors": null,
+    "hostname": "rhel8",
+    "host": "RHEL 8",
+    "api": false
+}

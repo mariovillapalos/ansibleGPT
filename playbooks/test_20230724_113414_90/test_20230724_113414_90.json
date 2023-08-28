@@ -1,0 +1,12 @@
+{
+    "prompt": "Create an Ansible playbook which ensures that /etc/shadow file has the correct permissions",
+    "content": "---\n- name: Ensure correct permissions for /etc/shadow file\n  hosts: all\n  become: true\n\n  tasks:\n    - name: Set correct permissions for /etc/shadow\n      file:\n        path: /etc/shadow\n        owner: root\n        group: root\n        mode: '0640'\n\n...",
+    "filename": "test_20230724_113414_90.yml",
+    "foldername": "test_20230724_113414_90",
+    "filepath": "./playbooks/test_20230724_113414_90/test_20230724_113414_90.yml",
+    "edited": false,
+    "errors": null,
+    "hostname": "rhel8",
+    "host": "RHEL 8",
+    "api": true
+}

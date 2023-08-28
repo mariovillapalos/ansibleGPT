@@ -1,0 +1,14 @@
+---
+- name: Ensure correct permissions for /etc/shadow file
+  hosts: rhel8
+  become: true
+
+  tasks:
+    - name: Set correct permissions for /etc/shadow
+      file:
+        path: /etc/shadow
+        owner: root
+        group: root
+        mode: '0640'
+
+...

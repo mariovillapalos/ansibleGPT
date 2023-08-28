@@ -1,0 +1,83 @@
+---
+- name: Configure iptables
+  hosts: rhel8
+  become: true
+  gather_facts: false
+
+  tasks:
+    - name: Verify iptables and iptables-services are installed
+      yum:
+        name: "{{ item }}"
+        state: present
+      with_items:
+        - iptables
+        - iptables-services
+      ignore_errors: true
+
+    - name: Install iptables and iptables-services
+      yum:
+        name: "{{ item }}"
+        state: present
+      with_items:
+        - iptables
+        - iptables-services
+      ignore_errors: true
+
+    - name: Stop firewalld service
+      service:
+        name: firewalld
+        state: stopped
+      ignore_errors: true
+
+    - name: Stop nftables service
+      service:
+        name: nftables
+        state: stopped
+      ignore_errors: true
+
+    - name: Start and enable iptables service
+      service:
+        name: iptables
+        state: started
+        enabled: true
+      ignore_errors: true
+
+    - name: Flush all firewall rules
+      command: iptables -F
+      ignore_errors: true
+
+    - name: Allow incoming SSH traffic only from specific IP address
+      command: iptables -A INPUT -p tcp --dport 22 -s 192.168.73.130 -j ACCEPT
+      ignore_errors: true
+
+    - name: Allow all incoming ICMP (ping) traffic
+      command: iptables -A INPUT -p icmp -j ACCEPT
+      ignore_errors: true
+
+    - name: Allow incoming HTTP (port 80) traffic
+      command: iptables -A INPUT -p tcp --dport 80 -j ACCEPT
+      ignore_errors: true
+
+    - name: Allow incoming HTTPS (port 443) traffic
+      command: iptables -A INPUT -p tcp --dport 443 -j ACCEPT
+      ignore_errors: true
+
+    - name: Set default policy as DROP for INPUT chain
+      command: iptables -P INPUT DROP
+      ignore_errors: true
+
+    - name: Set default policy as ACCEPT for OUTPUT chain
+      command: iptables -P OUTPUT ACCEPT
+      ignore_errors: true
+
+    - name: Save iptables rules
+      command: iptables-save > /etc/sysconfig/iptables
+      ignore_errors: true
+
+    - name: Restart iptables service
+      service:
+        name: iptables
+        state: restarted
+      ignore_errors: true
+
+...

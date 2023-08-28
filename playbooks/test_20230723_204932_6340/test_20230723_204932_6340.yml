@@ -1,0 +1,71 @@
+---
+- name: Configure iptables from scratch
+  hosts: rhel8
+  become: true
+  tasks:
+    - name: Verify iptables and iptables-services are installed
+      command: rpm -q iptables iptables-services
+      register: iptables_check
+      ignore_errors: true
+
+    - name: Install iptables and iptables-services if not installed
+      yum:
+        name: "{{ item }}"
+        state: present
+      with_items:
+        - iptables
+        - iptables-services
+      when: iptables_check.rc != 0
+      ignore_errors: true
+
+    - name: Stop firewalld service
+      service:
+        name: firewalld
+        state: stopped
+      ignore_errors: true
+
+    - name: Stop nftables service
+      service:
+        name: nftables
+        state: stopped
+      ignore_errors: true
+
+    - name: Start and enable iptables service
+      service:
+        name: iptables
+        state: started
+        enabled: true
+      ignore_errors: true
+
+    - name: Flush all firewall rules
+      shell: iptables -F
+      ignore_errors: true
+
+    - name: Allow incoming SSH traffic from specific IP address
+      shell: iptables -A INPUT -p tcp --dport 22 -s 192.168.73.130 -j ACCEPT
+      ignore_errors: true
+
+    - name: Allow outgoing SSH traffic to specific IP address when state is established
+      shell: iptables -A OUTPUT -p tcp --sport 22 -d 192.168.73.130 -m state --state ESTABLISHED -j ACCEPT
+      ignore_errors: true
+
+    - name: Allow all incoming ICMP (ping) traffic
+      shell: iptables -A INPUT -p icmp -j ACCEPT
+      ignore_errors: true
+
+    - name: Allow incoming HTTP (port 80) traffic
+      shell: iptables -A INPUT -p tcp --dport 80 -j ACCEPT
+      ignore_errors: true
+
+    - name: Allow incoming HTTPS (port 443) traffic
+      shell: iptables -A INPUT -p tcp --dport 443 -j ACCEPT
+      ignore_errors: true
+
+    - name: Set default policy as DROP for INPUT chain
+      shell: iptables -P INPUT DROP
+      ignore_errors: true
+
+    - name: Set default policy as ACCEPT for OUTPUT chain
+      shell: iptables -P OUTPUT ACCEPT
+      ignore_errors: true
+...

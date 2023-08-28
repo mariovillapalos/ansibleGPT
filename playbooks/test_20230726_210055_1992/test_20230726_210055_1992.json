@@ -1,0 +1,12 @@
+{
+    "prompt": "Create an Ansible playbook which ensures filesystem integrity is regularly checked using AIDE tool. Do it for RHEL8 host which his hostname is rhel8. First, verify that AIDE is not installed using RPM Package manager. If it isn`t installed, then install it (check the rc of the previous task). Then ensure AIDE database is initizalized with command \u201daide \u2013init\u201d. Rename AIDE database to /var/lib/aide/aide.db.gz. Afterwards ensure a cron job is scheduled to run the /usr/sbin/aide check every day at 5am using cron module with minute hour and day paramters. The code must be in the right format: - With a correct indentation, - Playbook must starts with --- - Playboook must ends with ... - The code should be using fully qualified module names (FQMN) - All tasks should be named - Use privilege escalation",
+    "content": "---\n- name: Ensure filesystem integrity using AIDE\n  hosts: rhel8\n  become: true\n  tasks:\n    - name: Verify AIDE is not installed\n      command: rpm -q aide\n      register: aide_installed\n      changed_when: false\n      failed_when: false\n\n    - name: Install AIDE if not installed\n      package:\n        name: aide\n        state: present\n      when: aide_installed.rc != 0\n\n    - name: Initialize AIDE database\n      command: aide --init\n      changed_when: false\n      register: aide_init\n\n    - name: Rename AIDE database\n      command: mv /var/lib/aide/aide.db.new.gz /var/lib/aide/aide.db.gz\n      changed_when: false\n      when: aide_init.rc == 0\n\n    - name: Schedule AIDE check using cron\n      cron:\n        name: \"Run AIDE check daily at 5am\"\n        minute: 0\n        hour: 5\n        job: \"/usr/bin/aide --check\"\n      changed_when: false\n...",
+    "filename": "test_20230726_210055_1992.yml",
+    "foldername": "test_20230726_210055_1992",
+    "filepath": "./playbooks/test_20230726_210055_1992/test_20230726_210055_1992.yml",
+    "edited": false,
+    "errors": null,
+    "hostname": "rhel8",
+    "host": "RHEL 8",
+    "api": true
+}

@@ -1,0 +1,46 @@
+---
+- name: Configure password policies on RHEL 8
+  hosts: rhel8
+  become: true
+  tasks:
+    - name: Set minimum password length in pwquality.conf
+      ansible.builtin.lineinfile:
+        path: /etc/security/pwquality.conf
+        line: "minlen = 14"
+        state: present
+      ignore_errors: yes
+
+    - name: Set minimum number of required character classes in pwquality.conf
+      ansible.builtin.lineinfile:
+        path: /etc/security/pwquality.conf
+        line: "minclass = 4"
+        state: present
+      ignore_errors: yes
+
+    - name: Set number of attempts before account lock in faillock.conf
+      ansible.builtin.lineinfile:
+        path: /etc/security/faillock.conf
+        line: "deny = 3"
+        state: present
+      ignore_errors: yes
+
+    - name: Set time in seconds before account unlock in faillock.conf
+      ansible.builtin.lineinfile:
+        path: /etc/security/faillock.conf
+        line: "unlock_time = 600"
+        state: present
+      ignore_errors: yes
+
+    - name: Add password reuse configuration to system-auth file
+      ansible.builtin.lineinfile:
+        path: /etc/pam.d/system-auth
+        line: "password required pam_pwhistory.so use_authtok remember=5"
+        state: present
+      ignore_errors: yes
+
+    - name: Add password reuse configuration to password-auth file
+      ansible.builtin.lineinfile:
+        path: /etc/pam.d/password-auth
+        line: "password required pam_pwhistory.so use_authtok remember=5"
+        state: present
+      ignore_errors: yes

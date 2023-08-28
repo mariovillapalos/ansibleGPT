@@ -1,0 +1,12 @@
+{
+    "prompt": "Create an Ansible playbook which  verify that sudo is installed. If it isn\u2019t then install it. The code must be in the right format:",
+    "content": "---\n- name: Verify and install sudo\n  hosts: rhel8\n  become: true\n  tasks:\n    - name: Check if sudo is installed\n      command: dpkg -s sudo\n      register: sudo_status\n      ignore_errors: true\n\n    - name: Install sudo\n      apt:\n        name: sudo\n        state: present\n      when: sudo_status.rc != 0\n\n...",
+    "filename": "test_20230724_015346_6955.yml",
+    "foldername": "test_20230724_015346_6955",
+    "filepath": "./playbooks/test_20230724_015346_6955/test_20230724_015346_6955.yml",
+    "edited": false,
+    "errors": null,
+    "hostname": "rhel8",
+    "host": "1",
+    "api": true
+}
