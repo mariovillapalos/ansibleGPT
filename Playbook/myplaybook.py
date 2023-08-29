@@ -101,19 +101,6 @@ class Playbook:
         with open(self.filepath, 'r') as f:
             file_text = f.read()
         return file_text
-
-    def check_playbook_syntax(self):
-                
-        print("Attempting to check syntax errors... \n")
-       
-        check_command = ["ansible-lint", self.filepath]
-        try:
-            check_process = subprocess.check_output(check_command, stderr=subprocess.STDOUT, encoding="utf-8")        
-            print("Syntax check passed")
-            return True, check_process.strip()
-        except subprocess.CalledProcessError as e:
-            print("Syntax check failed with the following output:\n{}".format(e.output))
-            return False, e.output.strip()
        
     def sanitize_playbook(self):
 
