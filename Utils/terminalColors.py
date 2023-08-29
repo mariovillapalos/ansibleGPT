@@ -17,8 +17,8 @@ def prLightPurple(skk):
     return "\033[94m {}\033[00m" .format(skk)
  
  
-def prPurple(skk): 
-     return "\033[95m {}\033[00m" .format(skk)
+def prPurple(skk):
+    return "\033[95m {}\033[00m" .format(skk)
  
  
 def prCyan(skk): 

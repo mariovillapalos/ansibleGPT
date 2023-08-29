@@ -1,9 +1,9 @@
 import os
 import signal
-from Playbook.myplaybook import * 
-from Playbook.myplaybook_with_editor  import *
-from Utils.terminalColors import * 
-from Utils.json_handler import  *
+from Playbook.myplaybook import *
+from Playbook.myplaybook_with_editor import *
+from Utils.terminalColors import *
+from Utils.json_handler import *
 
 # Capture "Ctrl+C" to prevent it from displaying faults
 def signal_handler(sig, frame):

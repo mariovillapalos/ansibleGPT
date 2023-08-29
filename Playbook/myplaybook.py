@@ -3,10 +3,9 @@ import random
 import time
 import ansiblelint
 import subprocess
-from Openai.myopenai import *
 import os
 import re
-import json
+from Openai.myopenai import *
 
 class Playbook:
     prompt = None
