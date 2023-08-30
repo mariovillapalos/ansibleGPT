@@ -58,7 +58,7 @@ def menuCreate():
 
         os.system("clear")
 
-        print(prGreen("[1] Create a playbook with Chat GPT API"))
+        print(prGreen("[1] Create a playbook with OpenAI API"))
         print(prGreen("[2] Create a playbook by YOURSELF"))
         print(prGreen("[3] Return to main menu"))
 
